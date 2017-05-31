@@ -13,9 +13,9 @@ if __name__=="__main__":
 
     hrm = None
     try:
-        hrm = HRM('EF:77:CA:CD:62:5F')
-        //Montre rouge EF:77:CA:CD:62:5F
-        //Montre bleu F9:EB:97:EE:2F:88
+        hrm = HRM('F9:EB:97:EE:2F:88')
+        #Montre rouge EF:77:CA:CD:62:5F
+        #Montre bleu F9:EB:97:EE:2F:88
 
         service, = [s for s in hrm.getServices() if s.uuid==hrmid]
         ccc, = service.getCharacteristics(forUUID=str(hrmmid))
@@ -32,11 +32,19 @@ if __name__=="__main__":
 
         t0=time.time()
         def print_hr(cHandle, data):
+
             bpm = ord(data[1])
-            print bpm,"%.2f"%(time.time()-t0)
+            rr = ord(data[2])
+            rr2 = ord(data[3])
+
+            rr = '{:08b}'.format(rr)
+            rr2 ='{:08b}'.format(rr2)
+            rrInMs = int(rr2+rr,2)
+            print "RR in ms: "+str(rrInMs)
+            print "BPM: " +str(bpm)
         hrm.delegate.handleNotification = print_hr
 
-        for x in range(100):
+        for x in range(10000):
             hrm.waitForNotifications(3.)
 
     finally:
